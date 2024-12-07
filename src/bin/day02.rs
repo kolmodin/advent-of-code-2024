@@ -3,11 +3,11 @@ use std::fs;
 use itertools::Itertools;
 
 fn increasing(x: i64) -> bool {
-    x >= 1 && x <= 3
+    (1..=3).contains(&x)
 }
 
 fn decreasing(x: i64) -> bool {
-    x >= -3 && x <= -1
+    (-3..=-1).contains(&x)
 }
 
 fn check(arr: &[i64], can_skip: bool, pred: &impl Fn(i64) -> bool) -> bool {
@@ -23,9 +23,9 @@ fn check(arr: &[i64], can_skip: bool, pred: &impl Fn(i64) -> bool) -> bool {
     let mut sub = vec![];
     for skip in 0..arr.len() {
         sub.clear();
-        for i in 0..arr.len() {
+        for (i, x) in arr.iter().enumerate() {
             if i != skip {
-                sub.push(arr[i]);
+                sub.push(*x);
             }
         }
 
@@ -34,7 +34,7 @@ fn check(arr: &[i64], can_skip: bool, pred: &impl Fn(i64) -> bool) -> bool {
         }
     }
 
-    return false;
+    false
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

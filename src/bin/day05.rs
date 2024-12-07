@@ -11,7 +11,7 @@ fn rule_ok(update: &[i32], rule: &(i32, i32)) -> bool {
             return x < y;
         }
     }
-    return true;
+    true
 }
 
 fn rules_ok(update: &[i32], rules: &[(i32, i32)]) -> bool {
@@ -33,7 +33,7 @@ fn top_sort(update: &[i32], rules: &[(i32, i32)]) -> Vec<i32> {
         if !update.contains(&rule.0) || !update.contains(&rule.1) {
             continue;
         }
-        nodes.entry(rule.0).or_insert_with(|| vec![]);
+        nodes.entry(rule.0).or_default();
         nodes
             .entry(rule.1)
             .and_modify(|k| k.push(rule.0))

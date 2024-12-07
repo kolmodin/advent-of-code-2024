@@ -25,7 +25,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let dos = content.split("do()").skip(1);
     for d in dos {
         let doit = d.split("don't()").next().unwrap();
-        for c in mul_re.captures_iter(&doit) {
+        for c in mul_re.captures_iter(doit) {
             let (_, [x, y]) = c.extract();
 
             let x: i64 = x.parse()?;
