@@ -2,16 +2,13 @@ use std::fs;
 
 use itertools::Itertools;
 
-
 fn solve(lines: &[(i64, Vec<i64>)], concat: bool) -> i64 {
     let mut sum = 0;
 
     for (target, nums) in lines {
-        let mut prev = vec![];
-        prev.push(nums[0]);
+        let mut prev = vec![nums[0]];
 
-        for i in 1..nums.len() {
-            let y = nums[i];
+        for &y in &nums[1..] {
             let mut next = Vec::with_capacity(prev.len() * 3);
             for &x in &prev {
                 if x + y <= *target {
@@ -23,10 +20,12 @@ fn solve(lines: &[(i64, Vec<i64>)], concat: bool) -> i64 {
                 if concat {
                     let mut x = x;
                     let mut my = y;
-                    assert_ne!(y, 0);
-                    while my > 0 {
-                        x*=10;
+                    loop {
+                        x *= 10;
                         my /= 10;
+                        if my == 0 {
+                            break;
+                        }
                     }
                     let z = x + y;
                     if z <= *target {
@@ -41,7 +40,7 @@ fn solve(lines: &[(i64, Vec<i64>)], concat: bool) -> i64 {
         }
     }
 
-    return sum;
+    sum
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
