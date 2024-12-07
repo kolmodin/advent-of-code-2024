@@ -49,10 +49,10 @@ fn patrol(map: Vec<u8>, start: Pos, bound: Pos) -> (Patrol, HashSet<Pos>) {
     let mut pos = start;
     let mut dir = Dir::up();
 
-    visited.insert(pos);
-    visited_dir.insert((pos, dir));
-
     loop {
+        visited.insert(pos);
+        visited_dir.insert((pos, dir));
+
         let next = pos.step(&dir);
         if visited_dir.contains(&(next, dir)) {
             return (Patrol::Looping, visited);
@@ -66,8 +66,6 @@ fn patrol(map: Vec<u8>, start: Pos, bound: Pos) -> (Patrol, HashSet<Pos>) {
         } else {
             pos = next;
         }
-        visited.insert(pos);
-        visited_dir.insert((pos, dir));
     }
 }
 
