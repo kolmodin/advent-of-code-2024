@@ -24,32 +24,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for &(i, n1) in nodes.iter() {
         for &(j, n2) in nodes.iter() {
-            if i >= j {
+            if i >= j || n1 != n2 {
                 continue;
             }
-            if n1 == n2 {
-                let a = from_linear(i);
-                let b = from_linear(j);
+            let a = from_linear(i);
+            let b = from_linear(j);
+            let add = |a: &(i32, i32), b: &(i32, i32)| (a.0 + b.0, a.1 + b.1);
+            let sub = |a: &(i32, i32), b: &(i32, i32)| (a.0 - b.0, a.1 - b.1);
+            let diff = sub(&b, &a);
 
-                let add = |a: &(i32, i32), b: &(i32, i32)| (a.0 + b.0, a.1 + b.1);
-                let sub = |a: &(i32, i32), b: &(i32, i32)| (a.0 - b.0, a.1 - b.1);
-                let diff = sub(&b, &a);
-
-                // Part 1
-                let left = sub(&a, &diff);
-                let right = add(&b, &diff);
-                if in_bounds(&left) {
-                    part1_antinodes.insert(left);
-                }
-
-                if in_bounds(&right) {
-                    part1_antinodes.insert(right);
-                }
-
-                // Part 2
-                part2_antinodes.extend(iterate(a, |x| sub(x, &diff)).take_while(in_bounds));
-                part2_antinodes.extend(iterate(b, |x| add(x, &diff)).take_while(in_bounds));
-            }
+            part1_antinodes.extend(Some(sub(&a, &diff)).filter(in_bounds));
+            part1_antinodes.extend(Some(add(&b, &diff)).filter(in_bounds));
+            part2_antinodes.extend(iterate(a, |x| sub(x, &diff)).take_while(in_bounds));
+            part2_antinodes.extend(iterate(b, |x| add(x, &diff)).take_while(in_bounds));
         }
     }
 
