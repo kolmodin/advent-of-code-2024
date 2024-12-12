@@ -83,7 +83,7 @@ fn part2(diskmap: &[u8]) -> usize {
                 };
                 std::mem::swap(&mut block, &mut blocks[j]);
 
-                blocks[j].sub.extend(block.sub.drain(..));
+                blocks[j].sub.append(&mut block.sub);
                 free[i] -= block.size;
                 free[j - 1] += block.size;
                 blocks[i].sub.push(block);
