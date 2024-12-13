@@ -1,6 +1,9 @@
-use std::ops::{Add, Sub};
+use std::{
+    cmp::{max, min},
+    ops::{Add, Range, Sub},
+};
 
-#[derive(Eq, PartialEq, PartialOrd, Default, Hash, Clone, Copy, Debug)]
+#[derive(Eq, PartialEq, PartialOrd, Ord, Default, Hash, Clone, Copy, Debug)]
 pub struct Pos {
     pub y: i32,
     pub x: i32,
@@ -38,9 +41,76 @@ fn gcd(a: i32, b: i32) -> i32 {
     a
 }
 
+#[derive(Debug)]
+pub struct Bounds(pub Pos, pub Pos);
+
+impl Bounds {
+    pub fn from_iter<'a>(mut positions: impl Iterator<Item = &'a Pos>) -> Option<Bounds> {
+        if let Some(fst) = positions.next() {
+            let mut max_x = fst.x;
+            let mut min_x = fst.x;
+
+            let mut max_y = fst.y;
+            let mut min_y = fst.y;
+
+            for p in positions {
+                max_x = max(max_x, p.x);
+                min_x = min(min_x, p.x);
+
+                max_y = max(max_y, p.y);
+                min_y = min(min_y, p.y);
+            }
+
+            return Some(Bounds(Pos::new(min_y, min_x), Pos::new(max_y, max_x)));
+        }
+        None
+    }
+
+    pub fn expand(&self) -> Bounds {
+        Bounds(self.0.up().left(), self.1.down().right())
+    }
+
+    pub fn along_x(&self) -> Range<i32> {
+        self.0.x .. self.1.x
+    }
+
+    pub fn along_y(&self) -> Range<i32> {
+        self.0.y .. self.1.y
+    }
+}
+
 impl Pos {
     pub fn new(y: i32, x: i32) -> Self {
         Pos { y, x }
+    }
+
+    pub fn cross(&self) -> impl Iterator<Item = Pos> {
+        vec![self.up(), self.down(), self.right(), self.left()].into_iter()
+    }
+
+    pub fn up(&self) -> Pos {
+        Pos {
+            y: self.y - 1,
+            x: self.x,
+        }
+    }
+    pub fn down(&self) -> Pos {
+        Pos {
+            y: self.y + 1,
+            x: self.x,
+        }
+    }
+    pub fn left(&self) -> Pos {
+        Pos {
+            y: self.y,
+            x: self.x - 1,
+        }
+    }
+    pub fn right(&self) -> Pos {
+        Pos {
+            y: self.y,
+            x: self.x + 1,
+        }
     }
 
     pub fn from_linear(i: i32, width: i32) -> Pos {
