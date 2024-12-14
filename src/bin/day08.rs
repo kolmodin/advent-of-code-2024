@@ -2,6 +2,16 @@ use std::{collections::HashSet, fs};
 
 use itertools::{Itertools, iterate};
 
+fn gcd(a: i32, b: i32) -> i32 {
+    let mut a = a.abs();
+    let mut b = b.abs();
+    while b != 0 {
+        a %= b;
+        std::mem::swap(&mut a, &mut b);
+    }
+    a
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let contents = fs::read_to_string("inputs/day08.txt")?;
 
@@ -35,6 +45,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             part1_antinodes.extend(Some(sub(&a, &diff)).filter(in_bounds));
             part1_antinodes.extend(Some(add(&b, &diff)).filter(in_bounds));
+
+            let d = gcd(diff.0, diff.1);
+            let diff = (diff.0 / d, diff.1 / d);
             part2_antinodes.extend(iterate(a, |x| sub(x, &diff)).take_while(in_bounds));
             part2_antinodes.extend(iterate(b, |x| add(x, &diff)).take_while(in_bounds));
         }
