@@ -6,8 +6,8 @@ use itertools::Itertools;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let contents = fs::read_to_string("inputs/day12.txt")?;
 
-    let width = contents.find('\n').unwrap() as i32;
-    let height = contents.lines().count() as i32;
+    let width = contents.find('\n').unwrap() as i64;
+    let height = contents.lines().count() as i64;
     let bounds = Pos {
         y: height,
         x: width,

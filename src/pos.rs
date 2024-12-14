@@ -5,8 +5,8 @@ use std::{
 
 #[derive(Eq, PartialEq, PartialOrd, Ord, Default, Hash, Clone, Copy, Debug)]
 pub struct Pos {
-    pub y: i32,
-    pub x: i32,
+    pub y: i64,
+    pub x: i64,
 }
 
 impl Add for Pos {
@@ -31,7 +31,7 @@ impl Sub for Pos {
     }
 }
 
-fn gcd(a: i32, b: i32) -> i32 {
+fn gcd(a: i64, b: i64) -> i64 {
     let mut a = a.abs();
     let mut b = b.abs();
     while b != 0 {
@@ -70,17 +70,17 @@ impl Bounds {
         Bounds(self.0.up().left(), self.1.down().right())
     }
 
-    pub fn along_x(&self) -> Range<i32> {
+    pub fn along_x(&self) -> Range<i64> {
         self.0.x..self.1.x
     }
 
-    pub fn along_y(&self) -> Range<i32> {
+    pub fn along_y(&self) -> Range<i64> {
         self.0.y..self.1.y
     }
 }
 
 impl Pos {
-    pub fn new(y: i32, x: i32) -> Self {
+    pub fn new(y: i64, x: i64) -> Self {
         Pos { y, x }
     }
 
@@ -113,14 +113,14 @@ impl Pos {
         }
     }
 
-    pub fn from_linear(i: i32, width: i32) -> Pos {
+    pub fn from_linear(i: i64, width: i64) -> Pos {
         Pos {
             y: i / width,
             x: i % width,
         }
     }
 
-    pub fn to_linear(&self, width: i32) -> usize {
+    pub fn to_linear(&self, width: i64) -> usize {
         (self.y * width + self.x) as usize
     }
 

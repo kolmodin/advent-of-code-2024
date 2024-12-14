@@ -10,7 +10,7 @@ struct Robot {
 }
 
 impl Robot {
-    fn step(&self, t: i32, bounds: Pos) -> Pos {
+    fn step(&self, t: i64, bounds: Pos) -> Pos {
         Pos {
             x: (self.pos.x + t * self.vec.x).rem_euclid(bounds.x),
             y: (self.pos.y + t * self.vec.y).rem_euclid(bounds.y),
@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .collect::<String>();
         let nums = s
             .split_whitespace()
-            .map(|s| s.parse::<i32>().unwrap())
+            .map(|s| s.parse::<i64>().unwrap())
             .collect_vec();
         if let &[x, y, vx, vy] = nums.as_slice() {
             robots.push(Robot {

@@ -16,8 +16,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("{}", contents);
 
-    let width = contents.find('\n').unwrap() as i32;
-    let height = contents.lines().count() as i32;
+    let width = contents.find('\n').unwrap() as i64;
+    let height = contents.lines().count() as i64;
     let bounds = Pos {
         y: height,
         x: width,
@@ -84,7 +84,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("Part 1: {} scores", part1_trails.len());
+    assert_eq!(part1_trails.len(), 552);
     println!("Part 2: {} unique trails", part2_distinct_tail_sum);
+    assert_eq!(part2_distinct_tail_sum, 1225);
 
     Ok(())
 }
