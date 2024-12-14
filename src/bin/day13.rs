@@ -1,4 +1,4 @@
-use std::{cmp::min, fs};
+use std::{fs};
 
 use itertools::Itertools;
 

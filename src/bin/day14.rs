@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .map(|ln| ln.iter().collect::<String>())
             .join("\n");
 
-        if str.find("xxxxxxxxxx").is_some() {
+        if str.contains("xxxxxxxxxx") {
             println!("Part 2: {}", t);
             // println!("{}", str);
             break;
