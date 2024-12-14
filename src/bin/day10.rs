@@ -14,8 +14,6 @@ struct Trail {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let contents = fs::read_to_string("inputs/day10.txt")?;
 
-    println!("{}", contents);
-
     let width = contents.find('\n').unwrap() as i64;
     let height = contents.lines().count() as i64;
     let bounds = Pos {
@@ -47,8 +45,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             });
         }
     }
-
-    println!("Up to {} trail starts", trails.len());
 
     let mut part1_trails = HashSet::new();
     let mut part2_distinct_tail_sum = 0;
