@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for y in 0..height {
         for x in 0..width {
-            let pos = Pos::new(y, x);
+            let pos = Pos::new(x, y);
             if original_map[pos.to_linear(width)] != 0 {
                 continue;
             }

@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut regions = vec![];
     for y in 0..height {
         for x in 0..width {
-            let start_pos = Pos::new(y, x);
+            let start_pos = Pos::new(x, y);
             if seen.contains(&start_pos) {
                 continue;
             }
@@ -63,7 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut within_side = false;
             for y in boxed.along_y() {
                 for x in boxed.along_x() {
-                    let p = Pos::new(y, x);
+                    let p = Pos::new(x, y);
                     if !r.1.contains(&p) {
                         within_side = false;
                         continue;
@@ -85,7 +85,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut within_side = false;
             for x in boxed.along_x() {
                 for y in boxed.along_y() {
-                    let p = Pos::new(y, x);
+                    let p = Pos::new(x, y);
                     if !r.1.contains(&p) {
                         within_side = false;
                         continue;

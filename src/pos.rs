@@ -61,7 +61,7 @@ impl Bounds {
                 min_y = min(min_y, p.y);
             }
 
-            return Some(Bounds(Pos::new(min_y, min_x), Pos::new(max_y, max_x)));
+            return Some(Bounds(Pos::new(min_x, min_y), Pos::new(max_x, max_y)));
         }
         None
     }
@@ -80,8 +80,8 @@ impl Bounds {
 }
 
 impl Pos {
-    pub fn new(y: i64, x: i64) -> Self {
-        Pos { y, x }
+    pub fn new(x: i64, y: i64) -> Self {
+        Pos { x, y }
     }
 
     pub fn cross(&self) -> impl Iterator<Item = Pos> {

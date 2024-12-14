@@ -33,13 +33,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .collect_vec();
         if let &[x, y, vx, vy] = nums.as_slice() {
             robots.push(Robot {
-                pos: Pos::new(y, x),
-                vec: Pos::new(vy, vx),
+                pos: Pos::new(x, y),
+                vec: Pos::new(vx, vy),
             });
         }
     }
 
-    let bounds = Pos::new(103, 101);
+    let bounds = Pos::new(101, 103);
 
     let part1_quadrants: usize = robots
         .iter()
