@@ -71,11 +71,11 @@ impl Bounds {
     }
 
     pub fn along_x(&self) -> Range<i32> {
-        self.0.x .. self.1.x
+        self.0.x..self.1.x
     }
 
     pub fn along_y(&self) -> Range<i32> {
-        self.0.y .. self.1.y
+        self.0.y..self.1.y
     }
 }
 
