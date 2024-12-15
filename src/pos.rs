@@ -1,12 +1,13 @@
 use std::{
     cmp::{max, min},
+    fmt::Display,
     ops::{Add, Range, Sub},
 };
 
 #[derive(Eq, PartialEq, PartialOrd, Ord, Default, Hash, Clone, Copy, Debug)]
 pub struct Pos {
-    pub y: i64,
     pub x: i64,
+    pub y: i64,
 }
 
 impl Add for Pos {
@@ -14,8 +15,8 @@ impl Add for Pos {
 
     fn add(self, rhs: Self) -> Self::Output {
         Pos {
-            y: self.y + rhs.y,
             x: self.x + rhs.x,
+            y: self.y + rhs.y,
         }
     }
 }
@@ -25,9 +26,15 @@ impl Sub for Pos {
 
     fn sub(self, rhs: Self) -> Self::Output {
         Pos {
-            y: self.y - rhs.y,
             x: self.x - rhs.x,
+            y: self.y - rhs.y,
         }
+    }
+}
+
+impl Display for Pos {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({},{})", self.x, self.y)
     }
 }
 
@@ -80,6 +87,21 @@ impl Bounds {
 }
 
 impl Pos {
+    pub fn north() -> Self {
+        Pos { x: 0, y: -1 }
+    }
+
+    pub fn south() -> Self {
+        Pos { x: 0, y: 1 }
+    }
+
+    pub fn west() -> Self {
+        Pos { x: -1, y: 0 }
+    }
+    pub fn east() -> Self {
+        Pos { x: 1, y: 0 }
+    }
+
     pub fn new(x: i64, y: i64) -> Self {
         Pos { x, y }
     }
