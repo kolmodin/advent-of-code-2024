@@ -48,25 +48,48 @@ fn part1(map: &str, path: &str) -> i64 {
     part1_sum
 }
 
-fn is_movable(map: &[u8], p: Pos, group: &mut HashSet<Pos>, width: i64, dir: Pos) -> bool {
-    if group.contains(&p) {
-        return true;
-    }
-    let c = map[p.to_linear(width)];
-    match c {
-        b'.' => true,
-        b'#' => false,
-        b'[' | b']' => {
-            group.insert(p);
-            if !is_movable(map, p + dir, group, width, dir) {
-                return false;
-            }
+struct Mover<'a> {
+    map: &'a [u8],
+    seen: HashSet<Pos>,
+    order: Vec<Pos>,
+    width: i64,
+    dir: Pos,
+}
 
-            let sibling = if c == b'[' { p.right() } else { p.left() };
-            group.insert(sibling);
-            is_movable(map, sibling + dir, group, width, dir)
+impl<'a> Mover<'a> {
+    fn is_movable(mut self, p: Pos) -> Option<Vec<Pos>> {
+        if self.recurse(p) {
+            Some(self.order)
+        } else {
+            None
         }
-        _ => panic!("unknown char in map"),
+    }
+    fn recurse(&mut self, p: Pos) -> bool {
+        if self.seen.contains(&p) {
+            return true;
+        }
+        let c = self.map[p.to_linear(self.width)];
+        match c {
+            b'.' => true,
+            b'#' => false,
+            b'[' | b']' => {
+                let sibling = if c == b'[' { p.right() } else { p.left() };
+                if !self.recurse(sibling + self.dir) {
+                    return false;
+                }
+                self.seen.insert(sibling);
+                self.order.push(sibling);
+
+                if !self.recurse(p + self.dir) {
+                    return false;
+                }
+                self.seen.insert(p);
+                self.order.push(p);
+
+                true
+            }
+            _ => panic!("unknown char in map"),
+        }
     }
 }
 
@@ -102,17 +125,17 @@ fn part2(map: &str, path: &str) -> i64 {
 
         let next_robot = robot + dir;
         if [b'[', b']'].contains(&map[next_robot.to_linear(width)]) {
-            let mut group = HashSet::<Pos>::new();
-            if is_movable(&map, next_robot, &mut group, width, dir) {
-                let recorded = group
-                    .iter()
-                    .map(|p| (*p, map[p.to_linear(width)]))
-                    .collect_vec();
-                for p in &group {
-                    map[p.to_linear(width)] = b'.';
-                }
-                for (p, c) in recorded {
-                    map[(p + dir).to_linear(width)] = c;
+            if let Some(group) = (Mover {
+                map: &map,
+                dir,
+                order: Default::default(),
+                seen: Default::default(),
+                width,
+            }
+            .is_movable(next_robot))
+            {
+                for p in group {
+                    map.swap(p.to_linear(width), (p + dir).to_linear(width));
                 }
             }
         }
