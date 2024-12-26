@@ -1,3 +1,5 @@
+use std::ops::{Index, IndexMut};
+
 use crate::pos::Pos;
 
 #[derive(Debug)]
@@ -31,6 +33,20 @@ impl From<&str> for Map<u8> {
     }
 }
 
+impl<T> Index<&Pos> for Map<T> {
+    type Output = T;
+
+    fn index(&self, index: &Pos) -> &Self::Output {
+        &self.data[index.to_linear(self.width)]
+    }
+}
+
+impl<T> IndexMut<&Pos> for Map<T> {
+    fn index_mut(&mut self, index: &Pos) -> &mut Self::Output {
+        &mut self.data[index.to_linear(self.width)]
+    }
+}
+
 impl Map<u8> {
     pub fn draw(&self) {
         for row in 0..self.height {
@@ -46,6 +62,10 @@ impl Map<u8> {
 }
 
 impl<T> Map<T> {
+    pub fn bounds(&self) -> Pos {
+        Pos::new(self.width, self.height)
+    }
+
     pub fn new_with_size(width: i64, height: i64, cell: T) -> Self
     where
         T: Clone,
@@ -55,6 +75,13 @@ impl<T> Map<T> {
             width,
             height,
         }
+    }
+
+    pub fn new_with_size_as<U>(other: &Map<U>, cell: T) -> Self
+    where
+        T: Clone,
+    {
+        Map::new_with_size(other.width, other.height, cell)
     }
 
     pub fn map<U>(&self, f: impl Fn(&T) -> U) -> Map<U> {
@@ -68,7 +95,7 @@ impl<T> Map<T> {
     pub fn get(&self, pos: Pos) -> Option<&T> {
         self.data.get(pos.to_linear(self.width))
     }
-    
+
     pub fn set(&mut self, x: i64, y: i64, val: T) {
         self.data[(y * self.width + x) as usize] = val;
     }
@@ -78,5 +105,9 @@ impl<T> Map<T> {
             .iter()
             .position(f)
             .map(|i| Pos::from_linear(i as i64, self.width))
+    }
+
+    pub fn iter_pos(&self) -> impl Iterator<Item = Pos> {
+        (0..self.width * self.height).map(|i| Pos::from_linear(i, self.width))
     }
 }

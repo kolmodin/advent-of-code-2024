@@ -1,7 +1,7 @@
 use std::{
     cmp::{max, min},
     fmt::Display,
-    ops::{Add, Range, Sub},
+    ops::{Add, Mul, Range, Sub},
 };
 
 #[derive(Eq, PartialEq, PartialOrd, Ord, Default, Hash, Clone, Copy, Debug)]
@@ -29,6 +29,14 @@ impl Sub for Pos {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
         }
+    }
+}
+
+impl Mul<usize> for Pos {
+    type Output = Pos;
+
+    fn mul(self, rhs: usize) -> Self::Output {
+        Pos::new(self.x * rhs as i64, self.y * rhs as i64)
     }
 }
 
@@ -107,7 +115,7 @@ impl Pos {
     }
 
     pub fn cross(&self) -> impl Iterator<Item = Pos> {
-        vec![self.up(), self.down(), self.right(), self.left()].into_iter()
+        [self.up(), self.down(), self.right(), self.left()].into_iter()
     }
 
     pub fn up(&self) -> Pos {
@@ -156,5 +164,9 @@ impl Pos {
 
     pub fn within_bounds(&self, bounds: &Pos) -> bool {
         self.x >= 0 && self.x < bounds.x && self.y >= 0 && self.y < bounds.y
+    }
+
+    pub fn manhattan(&self, other: Pos) -> usize {
+        ((self.x - other.x).abs() + (self.y - other.y).abs()) as usize
     }
 }
