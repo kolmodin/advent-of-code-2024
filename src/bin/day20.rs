@@ -1,4 +1,4 @@
-use std::{fs};
+use std::fs;
 
 use aoc2024::{map::Map, pos::Pos};
 use itertools::Itertools;
@@ -28,11 +28,12 @@ fn manhattan_up_to(p: &Pos, dist: usize) -> impl Iterator<Item = Pos> {
 fn solve(map: &Map<u8>, dist: &Map<usize>, manhattan: usize) -> Vec<usize> {
     let bounds = map.bounds();
     let mut cheats = vec![];
+    let outs = manhattan_up_to(&Pos::default(), manhattan).collect_vec();
     for p in map.iter_pos() {
         if dist[&p] == usize::MAX {
             continue;
         }
-        for c in manhattan_up_to(&p, manhattan) {
+        for c in outs.iter().map(|&o| p + o) {
             if !c.within_bounds(&bounds) || dist[&c] == usize::MAX {
                 continue;
             }
